@@ -10,6 +10,11 @@ jobs:
   nix-tests:
     name: "Linux Tests"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: ["ubuntu:16.04", "centos:7"]
+    container:
+      image: ${{ matrix.image }}
     steps:
       - name: Run script
         run: |
@@ -19,8 +24,6 @@ jobs:
           lscpu
           echo 'lsblk'
           lsblk -a
-          echo 'lsb_release'
-          lsb_release -a
           echo 'os-release'
           cat /etc/os-release
           echo 'cgroup'
