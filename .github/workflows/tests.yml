@@ -1,0 +1,27 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+name: Testing
+
+jobs:
+  nix-tests:
+    name: "Linux Tests"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run script
+        run: |
+          echo 'uname'
+          uname -a
+          echo 'lscpu'
+          lscpu
+          echo 'lsblk'
+          lsblk -a
+          echo 'lsb_release'
+          lsb_release -a
+          echo 'os-release'
+          cat /etc/os-release
+          echo 'cgroup'
+          cat /proc/1/cgroup
