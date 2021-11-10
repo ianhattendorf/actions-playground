@@ -7,24 +7,50 @@ on:
 name: Testing
 
 jobs:
-  nix-tests:
-    name: "Linux Tests"
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        image: ["ubuntu:16.04", "centos:7"]
-    container:
-      image: ${{ matrix.image }}
+  # nix-tests:
+  #   name: "Linux Tests"
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       image: ["ubuntu:16.04", "centos:7"]
+  #   container:
+  #     image: ${{ matrix.image }}
+  #   steps:
+  #     - name: Run script
+  #       run: |
+  #         echo 'uname'
+  #         uname -a
+  #         echo 'lscpu'
+  #         lscpu
+  #         echo 'lsblk'
+  #         lsblk -a
+  #         echo 'os-release'
+  #         cat /etc/os-release
+  #         echo 'cgroup'
+  #         cat /proc/1/cgroup
+  win-tests:
+    name: "Windows Tests"
+    runs-on: windows-2016
     steps:
       - name: Run script
         run: |
-          echo 'uname'
-          uname -a
-          echo 'lscpu'
-          lscpu
-          echo 'lsblk'
-          lsblk -a
-          echo 'os-release'
-          cat /etc/os-release
-          echo 'cgroup'
-          cat /proc/1/cgroup
+          echo $HOME
+          vcpkg install openssl:x64-windows
+
+      - name: Cache vcpkg
+        uses: actions/cache@v2
+        id: cache-vcpkg
+        with:
+          path: $HOME\AppData\Local\vcpkg
+          key:  win64-vcpkg
+          restore-keys: win64-vcpkg
+
+      - name: Run script 2
+        run: |
+          ls "c:\"
+          ls "c:\program files"
+          ls "c:\program files (x86)"
+          ls "c:\vcpkg\packages\openssl_x64-windows"
+          ls "c:\vcpkg\packages\openssl_x64-windows\lib"
+          ls "c:\vcpkg\packages\openssl_x64-windows\share"
+          ls "c:\vcpkg\packages\openssl_x64-windows\debug"
